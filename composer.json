@@ -1,0 +1,19 @@
+{
+    "name": "gmlconsulting/refinery",
+    "description": "",
+    "authors": [
+        {
+            "name": "Michael Jennings",
+            "email": "michaeljennings@gmlconsulting.co.uk"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Gmlconsulting\\Refinery": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
