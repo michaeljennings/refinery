@@ -1,4 +1,4 @@
-<?php namespace Gmlconsulting\Refinery\Contracts;
+<?php namespace Michaeljennings\Refinery\Contracts;
 
 interface Refinery {
 

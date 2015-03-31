@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Illuminate\\Support' => array($vendorDir . '/illuminate/support'),
-    'Gmlconsulting\\Refinery' => array($baseDir . '/src'),
+    'Michaeljennings\\Refinery' => array($baseDir . '/src'),
 );

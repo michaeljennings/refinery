@@ -1,10 +1,10 @@
 {
-    "name": "gmlconsulting/refinery",
-    "description": "",
+    "name": "michaeljennings/refinery",
+    "description": "A php class to refine data into a set format.",
     "authors": [
         {
             "name": "Michael Jennings",
-            "email": "michaeljennings@gmlconsulting.co.uk"
+            "email": "michael.jennings91@gmail.com"
         }
     ],
     "require": {
@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Gmlconsulting\\Refinery": "src/"
+            "Michaeljennings\\Refinery": "src/"
         }
     },
     "minimum-stability": "stable"

@@ -5,6 +5,4 @@
 $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
-return array(
-    $vendorDir . '/illuminate/support/Illuminate/Support/helpers.php',
-);
+return array();

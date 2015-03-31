@@ -1,4 +1,4 @@
-<?php namespace Gmlconsulting\Refinery;
+<?php namespace Michaeljennings\Refinery;
 
 use Closure, Traversable;
 
