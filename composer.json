@@ -1,6 +1,7 @@
 {
     "name": "michaeljennings/refinery",
     "description": "A php class to refine data into a set format.",
+    "license": "MIT",
     "authors": [
         {
             "name": "Michael Jennings",
