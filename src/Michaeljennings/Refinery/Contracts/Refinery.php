@@ -1,5 +1,7 @@
 <?php namespace Michaeljennings\Refinery\Contracts;
 
+use Closure;
+
 interface Refinery {
 
 	/**
@@ -14,9 +16,10 @@ interface Refinery {
 	 * Refine a collection of raw items
 	 * 
 	 * @param  mixed $raw
+     * @param  Closure $callback
 	 * @return array
 	 */
-	public function refineCollection($raw, $callback);
+	public function refineCollection($raw, Closure $callback);
 
 	/**
 	 * Attach the relational properties to a refined item

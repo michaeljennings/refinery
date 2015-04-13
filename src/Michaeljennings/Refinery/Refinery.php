@@ -1,8 +1,9 @@
 <?php namespace Michaeljennings\Refinery;
 
 use Closure, Traversable;
+use Michaeljennings\Refinery\Contracts\Refinery as RefineryContract;
 
-abstract class Refinery implements Contracts\Refinery {
+abstract class Refinery implements RefineryContract {
 
 	/**
 	 * The template for the refinery
