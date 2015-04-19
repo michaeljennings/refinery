@@ -57,7 +57,6 @@ As an example if I had a product and I wanted to make sure that its price always
 following.
 
 ```php
-
 class Product {
   public price = '10';
 }
@@ -126,30 +125,23 @@ $refinery->bring('options')->refine($product);
 To bring multiple attachments you can either add them as multiple arguments or pass an array.
 
 ```php
-
 $refinery->bring('options', 'foo', 'bar');
 $refinery->bring(['options', 'foo', 'bar']);
-
 ```
 
 You can also attach items into attachments by using a key value array.
 
 ```php
-
 $refinery->bring(['options' => 'foo']);
 $refinery->bring(['options' => ['foo', 'bar']]);
-
 ```
 
 You can also run methods from the attached item by passing the name of the attachment as the key and a closure as the 
 argument.
 
 ```php
-
-
 $refinery->bring(['options' => function($option) {
   $option->where('online', '=', true);
   return $option->get();
 }]);
-
 ```
