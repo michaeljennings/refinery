@@ -1,6 +1,7 @@
 <?php namespace Michaeljennings\Refinery;
 
 use Closure, Traversable;
+use Michaeljennings\Refinery\Exceptions\RefineryTemplateException;
 use Michaeljennings\Refinery\Contracts\Refinery as RefineryContract;
 
 abstract class Refinery implements RefineryContract {
@@ -26,17 +27,13 @@ abstract class Refinery implements RefineryContract {
 	 */
 	protected $query;
 
-	public function __construct()
-	{
-		$this->refineryTemplate = $this->setTemplate();
-	}
-
 	/**
 	 * Set the template the refinery will use for each item passed to it
 	 *
+     * @param mixed $item
 	 * @return Closure
 	 */
-	abstract protected function setTemplate();
+	abstract protected function setTemplate($item);
 
 	/**
 	 * Refine the item(s) using the set template
@@ -46,29 +43,22 @@ abstract class Refinery implements RefineryContract {
 	 */
 	public function refine($raw)
 	{
-		$callback = $this->refineryTemplate;
-
-		if ( ! $callback instanceof Closure) {
-			throw new Exceptions\RefineryTemplateException("The refinery template must be a closure.");
-		}
-
 		if ( is_array($raw) || $raw instanceof Traversable ) {
-			return $this->refineCollection($raw, $callback);
+			return $this->refineCollection($raw);
 		}
 
-		return $this->refineItem($raw, $callback);
+		return $this->refineItem($raw);
 	}
 
 	/**
 	 * Refine a single item using the supplied callback.
 	 * 
 	 * @param  mixed $raw
-	 * @param  Closure $callback
 	 * @return mixed
 	 */
-	public function refineItem($raw, Closure $callback)
+	public function refineItem($raw)
 	{
-		$refined = $callback($raw);
+		$refined = $this->setTemplate($raw);
 
 		if (!empty($this->relations)) {
 			$refined = $this->attachRelations($raw, $refined);
@@ -79,16 +69,16 @@ abstract class Refinery implements RefineryContract {
 
 	/**
 	 * Refine a collection of raw items.
-	 * 
-	 * @param  mixed $raw
+	 *
+     * @param mixed $raw
 	 * @return array
 	 */
-	public function refineCollection($raw, Closure $callback)
+	public function refineCollection($raw)
 	{
 		$refined = array();
 
 		foreach ($raw as $item) {
-			$refined[] = $this->refineItem($item, $callback);
+			$refined[] = $this->refineItem($item);
 		}
 
 		return $refined;

@@ -16,10 +16,9 @@ interface Refinery {
 	 * Refine a collection of raw items
 	 * 
 	 * @param  mixed $raw
-     * @param  Closure $callback
 	 * @return array
 	 */
-	public function refineCollection($raw, Closure $callback);
+	public function refineCollection($raw);
 
 	/**
 	 * Attach the relational properties to a refined item
