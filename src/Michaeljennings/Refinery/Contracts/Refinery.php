@@ -5,7 +5,7 @@ use Closure;
 interface Refinery {
 
 	/**
-	 * Refine the item(s) using the set template
+	 * Refine the item(s) using the set template.
 	 * 
 	 * @param  mixed $raw
 	 * @return mixed
@@ -13,36 +13,38 @@ interface Refinery {
 	public function refine($raw);
 
 	/**
-	 * Refine a collection of raw items
+	 * Refine a collection of raw items.
 	 * 
 	 * @param  mixed $raw
 	 * @return array
 	 */
 	public function refineCollection($raw);
 
-	/**
-	 * Attach the relational properties to a refined item
-	 * 
-	 * @param  mixed $raw 
-	 * @param  mixed $refined   
-	 * @return mixed
-	 */
-	public function attachRelations($raw, $refined);
+    /**
+     * Return any required attachments. Check if the attachment needs to be filtered,
+     * if so they run the callback and then return the attachments.
+     *
+     * @param  mixed $raw
+     * @return mixed
+     */
+    public function includeAttachments($raw);
 
-	/**
-	 * Set the relations you want to bring with the refined items
-	 * 
-	 * @param  string|array $relations
-	 * @return Refinery
-	 */
-	public function bring($relations);
+    /**
+     * Set the attachments you want to bring with the refined items.
+     *
+     * @param  string|array $attachments
+     * @return $this
+     */
+    public function bring($attachments);
 
-	/**
-	 * Set the class to be used for the relationship
-	 * 
-	 * @param  string  $relationalClass 
-	 * @return string 
-	 */
-	public function relationship($relationalClass);
+    /**
+     * Set the class to be used for the attachment.
+     *
+     * @param  string $className
+     * @return mixed
+     *
+     * @throws AttachmentClassNotFound
+     */
+    public function attach($className);
 	
 }
