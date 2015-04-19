@@ -12,8 +12,8 @@
         "php": ">=5.4.0"
     },
     "autoload": {
-        "psr-0": {
-            "Michaeljennings\\Refinery": "src/"
+        "psr-4": {
+            "Michaeljennings\\Refinery\\": "src/"
         }
     },
     "minimum-stability": "stable"
