@@ -50,6 +50,7 @@ $foo = new Foo;
 
 $data = $foo->refine(['foo', 'bar']);
 $multiDimensionalData = $foo->refine([['foo'], ['bar']]);
+```
 
 For example if I had a product object and I wanted to make sure that it's price always has two decimal places I could do the 
 following.
