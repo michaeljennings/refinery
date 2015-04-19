@@ -52,22 +52,30 @@ $data = $foo->refine(['foo', 'bar']);
 $multiDimensionalData = $foo->refine([['foo'], ['bar']]);
 ```
 
-For example if I had a product object and I wanted to make sure that it's price always has two decimal places I could do the 
+#### Example Usage
+As an example if I had a product and I wanted to make sure that its price always had two decimal figures I could do the
 following.
 
 ```php
-class Product extends Refinery {
+
+class Product {
+  public price = '10';
+}
+
+class ProductRefinery extends Refinery {
   public function setTemplate($product)
   {
-    return array(
+    return [
       'price' => number_format($product->price, 2),
-    );
+    ];
   }
 }
-    
-$foo = new Foo;
 
-$refinedProduct = $foo->refine($product);
+$product = new Product();
+$refinery = new ProductRefinery();
+
+$refinedProduct = $refinery->refine($product); // ['price' => 10.00]
+
 ```
 
 ### Attaching Data
