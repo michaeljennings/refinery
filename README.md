@@ -1,4 +1,5 @@
-# Refinery
+# Refinery [![Latest Stable Version](https://poser.pugx.org/michaeljennings/refinery/v/stable)](https://packagist.org/packages/michaeljennings/refinery) [![Latest Unstable Version](https://poser.pugx.org/michaeljennings/refinery/v/unstable)](https://packagist.org/packages/michaeljennings/refinery) [![License](https://poser.pugx.org/michaeljennings/refinery/license)](https://packagist.org/packages/michaeljennings/refinery)
+
 This project aims to add a layer of abstraction between your backend data store and the front end code. If you make an edit to 
 the way your data is stored this can often end up in you needing to make a lot of front end changes. This project helps by 
 formatting your data in one place so that if your back end changes, it won't effect the rest of your website.
