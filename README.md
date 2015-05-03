@@ -8,7 +8,7 @@ formatting your data in one place so that if your back end changes, it won't eff
 
 Include the package in your `composer.json`.
 
-    "michaeljennings/refinery": "0.1";
+    "michaeljennings/refinery": "~0.1";
 
 Run `composer install` or `composer update` to download the dependencies.
 
