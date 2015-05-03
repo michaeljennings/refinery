@@ -37,7 +37,7 @@ abstract class Refinery implements RefineryContract {
 	 */
 	public function refine($raw)
 	{
-		if ( is_array($raw) || $raw instanceof Traversable ) {
+		if ($raw instanceof Traversable) {
 			return $this->refineCollection($raw);
 		}
 
