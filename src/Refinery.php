@@ -37,7 +37,7 @@ abstract class Refinery implements RefineryContract {
 	 */
 	public function refine($raw)
 	{
-		if ($raw instanceof Traversable) {
+		if ( is_array($raw) || $raw instanceof Traversable ) {
 			return $this->refineCollection($raw);
 		}
 
@@ -89,19 +89,59 @@ abstract class Refinery implements RefineryContract {
 	{
         $attachments = [];
 
-		foreach ($this->attachments as $attachment => $class) {
-			if ($class->hasFilter()) {
-				$query = $class->getFilter();
-                $items = call_user_func_array($query, [$raw->$attachment()]);
-			} else {
-				$items = $raw->$attachment;
-			}
+		foreach ($this->attachments as $attachment => $refinery) {
+            $class = $refinery['class'];
+            $callback = isset($refinery['callback']) ? $refinery['callback'] : false;
+
+            if ( ! $callback) {
+                $items = $this->getItems($raw, $refinery['class'], $attachment);
+            } else {
+                $items = $this->getItemsUsingCallback($raw, $refinery['class'], $callback);
+            }
 
             $attachments[$attachment] = ! is_null($items) ? $class->refine($items) : null;
 		}
 
 		return $attachments;
 	}
+
+    /**
+     * Get the items to be refined from the raw object.
+     *
+     * @param mixed $raw
+     * @param mixed $class
+     * @param string $attachment
+     * @return mixed
+     */
+    protected function getItems($raw, $class, $attachment)
+    {
+        if ($class->hasFilter()) {
+            $query = $class->getFilter();
+            return call_user_func_array($query, [$raw->$attachment()]);
+        } else {
+            return $raw->$attachment;
+        }
+    }
+
+    /**
+     * Run a callback on the raw item(s) and then return the items.
+     *
+     * @param mixed $raw
+     * @param mixed $class
+     * @param callable $callback
+     * @return mixed
+     */
+    public function getItemsUsingCallback($raw, $class, Closure $callback)
+    {
+        if ($class->hasFilter()) {
+            $query = $class->getFilter();
+            $items = $callback($raw);
+
+            return call_user_func_array($query, [$items]);
+        } else {
+            return $callback($raw);
+        }
+    }
 
 	/**
 	 * Set the attachments you want to bring with the refined items.
@@ -132,10 +172,10 @@ abstract class Refinery implements RefineryContract {
 			if ( ! is_numeric($key)) {
 				if ($relation instanceof Closure) {
 					$parsedRelations[$key] = $this->attachItem($key);
-                    $parsedRelations[$key]->filter($relation);
+                    $parsedRelations[$key]['class']->filter($relation);
 				} else {
 					$parsedRelations[$key] = $this->attachItem($key);
-					$parsedRelations[$key]->bring($relation);
+					$parsedRelations[$key]['class']->bring($relation);
 				}
 			} else {
 				$parsedRelations[$relation] = $this->attachItem($relation);
@@ -165,21 +205,25 @@ abstract class Refinery implements RefineryContract {
 		return $this->$attachment();
 	}
 
-	/**
-	 * Set the class to be used for the attachment.
-	 * 
-	 * @param  string $className
-	 * @return mixed
+    /**
+     * Set the class to be used for the attachment.
      *
+     * @param string $className
+     * @param callable|bool $callback
+     * @return mixed
      * @throws AttachmentClassNotFound
-	 */
-	public function attach($className)
+     */
+	public function attach($className, $callback = false)
 	{
 		if ( ! class_exists($className)) {
             throw new AttachmentClassNotFound("No class found with the name '{$className}'.");
 		}
 
-        return new $className;
+        if ( ! $callback) {
+            return ['class' => new $className];
+        }
+
+        return ['class' => new $className, 'callback' => $callback];
 	}
 
     /**
