@@ -14,6 +14,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'fooBarAttach' => [
+                'foobar' => 'foobar',
+            ],
+            'fooBarEmbed' => [
+                'foobar' => 'foobar',
+            ],
             'foobar' => [
                 'foobar' => 'foobar',
             ]
@@ -39,6 +45,10 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->fooBarAttach = new stdClass();
+        $raw->fooBarAttach->foobar = 'foobar';
+        $raw->fooBarEmbed = new stdClass();
+        $raw->fooBarEmbed->foobar = 'foobar';
         $raw->foobar = new stdClass();
         $raw->foobar->foobar = 'foobar';
 
@@ -62,6 +72,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'fooBarAttach' => [
+                    'foobar' => 'foobar',
+                ],
+                'fooBarEmbed' => [
+                    'foobar' => 'foobar',
+                ],
                 'foobar' => [
                     'foobar' => 'foobar',
                 ]
@@ -71,6 +87,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'fooBarAttach' => [
+                    'foobar' => 'foobar',
+                ],
+                'fooBarEmbed' => [
+                    'foobar' => 'foobar',
+                ],
                 'foobar' => [
                     'foobar' => 'foobar',
                 ]
@@ -80,6 +102,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'fooBarAttach' => [
+                    'foobar' => 'foobar',
+                ],
+                'fooBarEmbed' => [
+                    'foobar' => 'foobar',
+                ],
                 'foobar' => [
                     'foobar' => 'foobar',
                 ]
@@ -107,6 +135,10 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->fooBarAttach = new stdClass();
+        $raw->fooBarAttach->foobar = 'foobar';
+        $raw->fooBarEmbed = new stdClass();
+        $raw->fooBarEmbed->foobar = 'foobar';
         $raw->foobar = new stdClass();
         $raw->foobar->foobar = 'foobar';
 
@@ -132,6 +164,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'fooBarAttach' => [
+                'foobar' => 'foobar',
+            ],
+            'fooBarEmbed' => [
+                'foobar' => 'foobar',
+            ],
             'foobar' => [
                 'foobar' => 'foobar',
             ]
@@ -161,6 +199,10 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->fooBarAttach = new stdClass();
+        $raw->fooBarAttach->foobar = 'foobar';
+        $raw->fooBarEmbed = new stdClass();
+        $raw->fooBarEmbed->foobar = 'foobar';
         $raw->foobar = new stdClass();
         $raw->foobar->foobar = 'foobar';
 
@@ -188,6 +230,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'fooBarAttach' => [
+                'foobar' => 'foobar',
+            ],
+            'fooBarEmbed' => [
+                'foobar' => 'foobar',
+            ],
             'foobar' => [
                 'foobar' => 'foobar',
             ]
@@ -209,6 +257,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'fooBarAttach' => [
+                'foobar' => 'foobar',
+            ],
+            'fooBarEmbed' => [
+                'foobar' => 'foobar',
+            ],
             'foobar' => [
                 'foobar' => 'foobar',
             ]
