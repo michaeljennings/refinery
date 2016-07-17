@@ -32,11 +32,11 @@ interface Refinery
      * Set the class to be used for the attachment.
      *
      * @param string        $className
-     * @param callable|bool $callback
+     * @param callable $callback
      * @return array
      * @throws \Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound
      */
-    public function attach($className, callable $callback = false);
+    public function attach($className, callable $callback = null);
 
     /**
      * Alias for the attach method.
@@ -46,7 +46,7 @@ interface Refinery
      * @return array
      * @throws \Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound
      */
-    public function embed($className, callable $callback = false);
+    public function embed($className, callable $callback = null);
 
     /**
      * Alias for the attach method.
@@ -56,5 +56,5 @@ interface Refinery
      * @return array
      * @throws \Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound
      */
-    public function nest($className, callable $callback = false);
+    public function nest($className, callable $callback = null);
 }

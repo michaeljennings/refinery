@@ -217,7 +217,7 @@ abstract class Refinery implements RefineryContract
      * @return array
      * @throws AttachmentClassNotFound
      */
-    public function attach($className, callable $callback = false)
+    public function attach($className, callable $callback = null)
     {
         if ( ! class_exists($className)) {
             throw new AttachmentClassNotFound("No class found with the name '{$className}'.");
@@ -238,7 +238,7 @@ abstract class Refinery implements RefineryContract
      * @return array
      * @throws AttachmentClassNotFound
      */
-    public function embed($className, callable $callback = false)
+    public function embed($className, callable $callback = null)
     {
         return $this->attach($className, $callback);
     }
@@ -251,7 +251,7 @@ abstract class Refinery implements RefineryContract
      * @return array
      * @throws AttachmentClassNotFound
      */
-    public function nest($className, callable $callback = false)
+    public function nest($className, callable $callback = null)
     {
         return $this->attach($className, $callback);
     }
@@ -334,6 +334,12 @@ abstract class Refinery implements RefineryContract
      */
     protected function isMultidimensional(array $array)
     {
-        return count($array) != count($array, COUNT_RECURSIVE);
+        foreach ($array as $element) {
+            if ( ! is_array($element) && ! is_object($element)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
