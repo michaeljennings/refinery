@@ -14,6 +14,9 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'foobar' => [
+                'foobar' => 'foobar',
+            ]
         ];
 
         $refined = $refinery->refine($raw);
@@ -36,6 +39,8 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->foobar = new stdClass();
+        $raw->foobar->foobar = 'foobar';
 
         $refined = $refinery->refine($raw);
 
@@ -57,18 +62,27 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'foobar' => [
+                    'foobar' => 'foobar',
+                ]
             ],
             [
                 'foo' => 'foo',
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'foobar' => [
+                    'foobar' => 'foobar',
+                ]
             ],
             [
                 'foo' => 'foo',
                 'bar' => 'bar',
                 'foo1' => 'foo1',
                 'bar2' => 'bar2',
+                'foobar' => [
+                    'foobar' => 'foobar',
+                ]
             ],
         ];
 
@@ -93,6 +107,8 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->foobar = new stdClass();
+        $raw->foobar->foobar = 'foobar';
 
         $rawCollection = [$raw, $raw, $raw];
 
@@ -116,6 +132,9 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'foobar' => [
+                'foobar' => 'foobar',
+            ]
         ];
 
         $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->refine($raw);
@@ -142,6 +161,8 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->bar = 'bar';
         $raw->foo1 = 'foo1';
         $raw->bar1 = 'bar1';
+        $raw->foobar = new stdClass();
+        $raw->foobar->foobar = 'foobar';
 
         $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->refine($raw);
 
@@ -167,6 +188,9 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'foobar' => [
+                'foobar' => 'foobar',
+            ]
         ];
 
         $refinery->bring('classDoesNotExist')->refine($raw);
@@ -185,6 +209,9 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             'bar' => 'bar',
             'foo1' => 'foo1',
             'bar2' => 'bar2',
+            'foobar' => [
+                'foobar' => 'foobar',
+            ]
         ];
 
         $refinery->bring('notSet')->refine($raw);
