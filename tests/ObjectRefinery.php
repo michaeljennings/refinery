@@ -21,17 +21,17 @@ class ObjectRefinery extends Refinery
 
     public function fooBarAttach()
     {
-        return $this->attach(FooBarObjectRefinery::class);
+        return $this->attach('FooBarObjectRefinery');
     }
 
     public function fooBarEmbed()
     {
-        return $this->embed(FooBarObjectRefinery::class);
+        return $this->embed('FooBarObjectRefinery');
     }
 
     public function fooBarNest()
     {
-        return $this->nest(FooBarObjectRefinery::class, function($raw) {
+        return $this->nest('FooBarObjectRefinery', function($raw) {
             return $raw;
         });
     }

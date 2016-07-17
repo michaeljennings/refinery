@@ -21,17 +21,17 @@ class ArrayRefinery extends Refinery
 
     public function fooBarAttach()
     {
-        return $this->attach(FooBarArrayRefinery::class);
+        return $this->attach('FooBarArrayRefinery');
     }
 
     public function fooBarEmbed()
     {
-        return $this->embed(FooBarArrayRefinery::class);
+        return $this->embed('FooBarArrayRefinery');
     }
 
     public function fooBarNest()
     {
-        return $this->nest(FooBarArrayRefinery::class, function($raw) {
+        return $this->nest('FooBarArrayRefinery', function($raw) {
             return $raw;
         });
     }
