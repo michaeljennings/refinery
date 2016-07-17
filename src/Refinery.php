@@ -122,7 +122,7 @@ abstract class Refinery implements RefineryContract
 
             return call_user_func_array($query, [$raw->$attachment()]);
         } else {
-            return $raw->$attachment;
+            return is_object($raw) ? $raw->$attachment : $raw[$attachment];
         }
     }
 
