@@ -1,14 +1,56 @@
-# Refinery [![Latest Stable Version](https://poser.pugx.org/michaeljennings/refinery/v/stable)](https://packagist.org/packages/michaeljennings/refinery) [![Build Status](https://travis-ci.org/michaeljennings/refinery.svg?branch=v0.1.1)](https://travis-ci.org/michaeljennings/refinery) [![Latest Unstable Version](https://poser.pugx.org/michaeljennings/refinery/v/unstable)](https://packagist.org/packages/michaeljennings/refinery) [![License](https://poser.pugx.org/michaeljennings/refinery/license)](https://packagist.org/packages/michaeljennings/refinery)
+# Refinery [![Latest Stable Version](https://poser.pugx.org/michaeljennings/refinery/v/stable)](https://packagist.org/packages/michaeljennings/refinery) [![Build Status](https://travis-ci.org/michaeljennings/refinery.svg?branch=v0.1.1)](https://travis-ci.org/michaeljennings/refinery)
 
 This project aims to add a layer of abstraction between your backend data store and the front end code. If you make an edit to 
 the way your data is stored this can often end up in you needing to make a lot of front end changes. This project helps by 
 formatting your data in one place so that if your back end changes, it won't effect the rest of your website.
 
+## Example
+
+Below is a basic example of how to use refinery.
+
+```php
+// Here we have a product we want to refine
+class Product
+{
+    public $price = 10
+    public $description = 'Something really cool!'
+}
+
+// So we create a product refinery where we set the product template
+class ProductRefinery extends Refinery
+{
+    public function setTemplate($product)
+    {
+        return [
+            'price' => number_format($product->price, 2),
+            'description' => $product->description,
+            'full_description' => $product->description . ' For only £' . number_format($product->price, 2),
+        ];
+    }
+}
+
+// Then we create the instances and refine the product
+$product = new Product();
+$refinery = new ProductRefinery();
+
+var_dump($refinery->refine($product));
+ 
+// The above will output:
+// ['price' => '10.00', 'description' => 'Something really cool!', 'full_description' => 'Something really cool! For only £10.00']
+```
+
+## Navigation
+
+- [Installation](#installation)
+- [Usage](#usage)
+    - [Example Usage](#example-usage)
+- [Attaching Data](#attaching-data)
+
 ## Installation
 
 Include the package in your `composer.json`.
 
-    "michaeljennings/refinery": "~0.1";
+    "michaeljennings/refinery": "~1.0";
 
 Run `composer install` or `composer update` to download the dependencies.
 
@@ -19,16 +61,17 @@ To create a new refinery simply extend the `Michaeljennings\Refinery\Refinery`.
 ```php
 use Michaeljennings\Refinery\Refinery;
 
-class Foo extends Refinery {
+class Foo extends Refinery 
+{
   
 }
 ```
 
-The refinery has one abstract method which is `setTemplate`. The setTemplate method is passed the item being refined
-and then you just need to return it in the format you want.
+The refinery has one abstract method which is `setTemplate`. The setTemplate method is passed the item being refined and then you just need to return it in the format you want.
 
 ```php
-class Foo extends Refinery {
+class Foo extends Refinery 
+{
   public function setTemplate($data)
   {
     // Refine data
