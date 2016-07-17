@@ -54,7 +54,7 @@ interface Refinery
      * @param string   $className
      * @param callable $callback
      * @return array
-     * @throws \Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound
+     * @throws \Michaeljennings\Refinery\Exceptions\AttachmentClassNotFoundg
      */
-    public function nest($className, callable $callback = false)
+    public function nest($className, callable $callback = false);
 }
