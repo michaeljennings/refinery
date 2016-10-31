@@ -96,6 +96,34 @@ $data = $foo->refine(['foo', 'bar']);
 $multiDimensionalData = $foo->refine([['foo'], ['bar']]);
 ```
 
+If you would like to pass additional data into the refinery, you can use the `with` method.
+
+```php
+$foo = new Foo;
+
+$data = $foo->with(['baz' => 'qux'])->refine(['foo', 'bar']);
+```
+
+Within your refinery, you can the access the data you've passed in using two ways:
+
+```php
+class MyRefinery extends Refinery {
+  public function setTemplate($data)
+  {
+    //Method 1
+    $baz = $this->baz;
+    
+    //Method 2
+    $baz = $this->attributes['baz'];
+    
+    return [
+      
+    ];
+  }
+}
+```
+
+
 #### Example Usage
 As an example if I had a product and I wanted to make sure that its price always had two decimal figures I could do the
 following.

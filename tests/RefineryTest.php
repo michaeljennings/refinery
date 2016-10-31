@@ -25,11 +25,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ]
         ];
 
-        $refined = $refinery->refine($raw);
+        $refined = $refinery->with(['quux' => 'quux1'])->refine($raw);
 
         $this->assertArrayHasKey('baz', $refined);
         $this->assertArrayNotHasKey('foo1', $refined);
         $this->assertContains('foo', $refined);
+        $this->assertContains('quux1', $refined);
     }
 
     /**
@@ -52,11 +53,12 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->foobar = new stdClass();
         $raw->foobar->foobar = 'foobar';
 
-        $refined = $refinery->refine($raw);
+        $refined = $refinery->with(['quux' => 'quux1'])->refine($raw);
 
         $this->assertArrayHasKey('baz', $refined);
         $this->assertContains('foo', $refined);
         $this->assertArrayNotHasKey('foo1', $refined);
+        $this->assertContains('quux1', $refined);
     }
 
     /**
@@ -114,12 +116,13 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $refined = $refinery->refine($raw);
+        $refined = $refinery->with(['quux' => 'quux1'])->refine($raw);
 
         $this->assertCount(3, $refined);
         $this->assertArrayHasKey('baz', $refined[0]);
         $this->assertArrayNotHasKey('foo1', $refined[0]);
         $this->assertContains('foo', $refined[0]);
+        $this->assertContains('quux1', $refined[0]);
     }
 
     /**
@@ -144,12 +147,13 @@ class RefineryTest extends PHPUnit_Framework_TestCase
 
         $rawCollection = [$raw, $raw, $raw];
 
-        $refined = $refinery->refine($rawCollection);
+        $refined = $refinery->with(['quux' => 'quux1'])->refine($rawCollection);
 
         $this->assertCount(3, $refined);
         $this->assertArrayHasKey('baz', $refined[0]);
         $this->assertContains('foo', $refined[0]);
         $this->assertArrayNotHasKey('foo1', $refined[0]);
+        $this->assertContains('quux1', $refined[0]);
     }
 
     /**
@@ -175,7 +179,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ]
         ];
 
-        $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->refine($raw);
+        $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->with(['quux' => 'quux1'])->refine($raw);
 
         $this->assertArrayHasKey('baz', $refined);
         $this->assertArrayNotHasKey('foo1', $refined);
@@ -184,6 +188,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('fooBarEmbed', $refined);
         $this->assertArrayHasKey('fooBarNest', $refined);
         $this->assertArrayHasKey('foobar', $refined['fooBarNest']);
+        $this->assertContains('quux1', $refined);
     }
 
     /**
@@ -206,7 +211,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $raw->foobar = new stdClass();
         $raw->foobar->foobar = 'foobar';
 
-        $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->refine($raw);
+        $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->with(['quux' => 'quux1'])->refine($raw);
 
         $this->assertArrayHasKey('baz', $refined);
         $this->assertContains('foo', $refined);
@@ -215,6 +220,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('fooBarEmbed', $refined);
         $this->assertArrayHasKey('fooBarNest', $refined);
         $this->assertArrayHasKey('foobar', $refined['fooBarNest']);
+        $this->assertContains('quux1', $refined);
     }
 
     /**

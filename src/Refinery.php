@@ -24,6 +24,13 @@ abstract class Refinery implements RefineryContract
     protected $filter;
 
     /**
+     * The extra data which is available within a refinery.
+     *
+     * @var array
+     */
+    protected $attributes = [];
+
+    /**
      * Set the template the refinery will use for each item passed to it
      *
      * @param mixed $item
@@ -78,6 +85,20 @@ abstract class Refinery implements RefineryContract
         }
 
         return $refined;
+    }
+
+    /**
+     * Store the passed items within the $attributes
+     * property.
+     *
+     * @param array $items
+     * @return $this
+     */
+    public function with(array $items)
+    {
+        $this->attributes = $items;
+
+        return $this;
     }
 
     /**
@@ -341,5 +362,21 @@ abstract class Refinery implements RefineryContract
         }
 
         return true;
+    }
+
+    /**
+     * Use the __get magic method to access the items within the $attributes
+     * array is if you were accessing a property on the class.
+     *
+     * @param $key
+     * @return null
+     */
+    public function __get($key)
+    {
+        if(array_key_exists($key, $this->attributes)) {
+            return $this->attributes[$key];
+        }
+
+        return null;
     }
 }
