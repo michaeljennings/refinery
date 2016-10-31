@@ -16,6 +16,7 @@ class ObjectRefinery extends Refinery
             'foo' => $item->foo,
             'bar' => $item->bar,
             'baz' => 'qux',
+            'quux' => $this->quux
         ];
     }
 
