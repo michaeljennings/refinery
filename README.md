@@ -44,15 +44,21 @@ var_dump($refinery->refine($product));
 - [Installation](#installation)
 - [Usage](#usage)
     - [Example Usage](#example-usage)
-- [Attaching Data](#attaching-data)
+- [Multidimensional Refining](#multidimensional-refining)
+- [Advanced Refining](#advanced-refining)
+    - [Using External Data](#using-external-data)
+    - [Custom Attachments](#custom-attachments)
+    - [Raw Attachments](#raw-attachments)
 
 ## Installation
 
-Include the package in your `composer.json`.
+Run `composer require michaeljennings/refinery`.
 
-    "michaeljennings/refinery": "~1.0";
+Or add the package to your `composer.json`.
 
-Run `composer install` or `composer update` to download the dependencies.
+```
+"michaeljennings/refinery": "~1.0";
+```
 
 ## Usage
 
@@ -96,35 +102,7 @@ $data = $foo->refine(['foo', 'bar']);
 $multiDimensionalData = $foo->refine([['foo'], ['bar']]);
 ```
 
-If you would like to pass additional data into the refinery, you can use the `with` method.
-
-```php
-$foo = new Foo;
-
-$data = $foo->with(['baz' => 'qux'])->refine(['foo', 'bar']);
-```
-
-Within your refinery, you can the access the data you've passed in using two ways:
-
-```php
-class MyRefinery extends Refinery {
-  public function setTemplate($data)
-  {
-    //Method 1
-    $baz = $this->baz;
-    
-    //Method 2
-    $baz = $this->attributes['baz'];
-    
-    return [
-      
-    ];
-  }
-}
-```
-
-
-#### Example Usage
+### Example Usage
 As an example if I had a product and I wanted to make sure that its price always had two decimal figures I could do the
 following.
 
@@ -149,71 +127,172 @@ $refinedProduct = $refinery->refine($product); // ['price' => 10.00]
 
 ```
 
-### Attaching Data
+## Multidimensional Refining
 
-Occasionally you may also need to refine data with in an item, to do this you can use the we can use attachments.
+When you are working with database data, particularly relational data, it's common that you won't just be refining the main entity, you may have parent and child data that also needs to be refined.
 
-To attach data we first need to set up a method on the refinery with the name of the item we are trying to attach. For 
-example if I had a product and I wanted to refine its options to it I would create an options method. This method needs 
-to return the attach method which takes one parameter which is the name of the class we shall use to refine the 
-attachment.
+This is best displayed with an example. Below we have a product that has many variants, and belongs to a category.
 
 ```php
-class ProductRefinery extends Refinery {
-  public function setTemplate($product)
-  {
-    // Refine Product
-  }
-  
-  protected function options()
-  {
-    return $this->attach('OptionRefinery');
-  }
+$product = [
+    'name' => 'Awesome Product',
+    'description' => 'This is an awesome product',
+    'price' => 10.00,
+    'category' => [
+        'name' => 'Awesome Products',
+    ],
+    'variants' => [
+        [
+            'size' => 'Medium',
+        ],
+        [
+            'size' => 'Large',
+        ]
+    ]
+]
+```
+
+This parent and child data will usually be refined in the same way in every area it is used within your application, therefore it makes sense to move it into it's own class so that it can be reused.
+
+To do that we use attachments.
+
+Below we have a product refinery, that has category and variant attachments.
+
+```php
+class ProductRefinery extends Refinery
+{
+    public function setTemplate($product)
+    {
+        return [
+            'name' => $product['name'],
+            'description' => $product['description'],
+            'price' => '£' . number_format($product['price'], 2),
+        ];
+    }
+
+    public function category()
+    {
+        return $this->attach(CategoryRefinery::class);
+    }
+
+    public function variants()
+    {
+        return $this->attach(CategoryRefinery::class);
+    }
 }
+```
 
-class OptionRefinery extends Refiner {
-  public function setTemplate($option)
-  {
-    // Refine Product Option
-  }
+These attachments will only be brought with the item when the `bring` method is called when refining.
+
+```php
+// Will just refine the product data.
+$refinedProduct = $productRefinery->refine($product);
+
+// Will refine the product, category, and the variants.
+$refinedProductWithAttachments $productRefinery->bring('category', 'variants')->refine($product);
+```
+
+When you attempt to bring attachments it will look for methods on the refinery class with the specified attachment name.
+
+For example if we were to do the following:
+
+```php
+$refinedProductWithAttachments $productRefinery->bring('category')->refine($product);
+```
+
+There would need to be a method called `category` on our product refinery.
+
+The refinery will then attempt to pass the category property from the product to the category refinery.
+
+Attachments can also be multidimensional. For example below we are bringing a product with it's category, and then we are bringing the category's meta data.
+
+```php
+$refined = $productRefinery->bring(['category' => ['meta']])->refine($product);
+```
+
+This will look for the category attachment on the product refinery, and then a meta attachment on the category refinery.
+
+## Advanced Refining
+
+### Using External Data
+
+When refining you may need to access data that is not part of the main object.
+
+For example, below we want to get the correct currency symbol for the country the user is in, however the country cannot be accessed from the product.
+
+To get around this we use the `with` method to pass through the current country to the product refinery.
+
+```php
+$country = [
+    'name' => 'United Kingdom',
+    'symbol' => '£',
+];
+
+$refined = $productRefinery->with(['country' => $country])->refine($product);
+```
+
+Then in the `setTemplate` method in the refinery we can access the country as shown below.
+
+```php
+class ProductRefinery extends Refinery
+{
+    public function setTemplate($product)
+    {
+        $symbol = $this->country['symbol'];
+        // OR
+        $symbol = $this->attributes['country']['symbol'];
+
+        return [
+            'name' => $product['name'],
+            'description' => $product['description'],
+            'price' => $symbol . number_format($product['price'], 2),
+        ];
+    }
 }
 ```
 
-Then to refine that data all you need to do is run the `bring` method and specify the attachments you want to bring.
+### Custom Attachments
+
+Occasionally you may want to set attachments that don't actually exist in the original data.
+
+For example below we have added a `largeVariant` attachment to our product refinery.
+
+By passing a closure to the second argument of the `attach` method we can choose what data we want to send to the refinery. The closure will be passed the current item being refined, which in this case is the product.
 
 ```php
-class Product {
-  public $options = [
-    // options
-  ];
+class ProductRefinery extends Refinery
+{
+    public function largeVariant()
+    {
+        return $this->attach(VariantRefinery::class, function($product) {
+            return array_filter($product['variants'], function($variant) {
+                return $variant['size'] == 'Large';
+            });
+        });
+    }
 }
-
-$product = new Product();
-$refinery = new ProductRefinery();
-
-$refinery->bring('options')->refine($product);
 ```
 
-To bring multiple attachments you can either add them as multiple arguments or pass an array.
+### Raw Attachments
+
+Refining can also be performed without a preset class, for instance if you want to refine a multidimensional array to a single array.
+
+Below we have added an attachment which gets all of the sizes for a product and returns it as an array.
 
 ```php
-$refinery->bring('options', 'foo', 'bar');
-$refinery->bring(['options', 'foo', 'bar']);
-```
+class ProductRefinery extends Refinery
+{
+    public function sizes()
+    {
+        return $this->attach(function($product) {
+            $sizes = [];
 
-You can also attach items into attachments by using a key value array.
+            foreach ($product['variants'] as $variant) {
+                $sizes[] = $variant['size'];
+            }
 
-```php
-$refinery->bring(['options' => 'foo']);
-$refinery->bring(['options' => ['foo', 'bar']]);
-```
-
-You can also run methods from the attached item by passing the name of the attachment as the key and a closure as the 
-argument.
-
-```php
-$refinery->bring(['options' => function($option) {
-  $option->where('online', '=', true);
-  return $option->get();
-}]);
+            return $sizes;
+        });
+    }
+}
 ```
