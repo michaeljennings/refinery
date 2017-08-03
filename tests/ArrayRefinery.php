@@ -37,6 +37,13 @@ class ArrayRefinery extends Refinery
         });
     }
 
+    public function fooBarRaw()
+    {
+        return $this->attach(function($item) {
+            return $item['foo'] . $item['bar'];
+        });
+    }
+
     public function classDoesNotExist()
     {
         return $this->attach("NonExistentClass");

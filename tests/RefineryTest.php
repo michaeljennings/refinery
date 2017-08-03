@@ -276,4 +276,24 @@ class RefineryTest extends PHPUnit_Framework_TestCase
 
         $refinery->bring('notSet')->refine($raw);
     }
+
+    /**
+     * @test
+     */
+    public function it_attaches_a_raw_attachment()
+    {
+        $refinery = new ArrayRefinery();
+
+        $raw = [
+            'foo' => 'foo',
+            'bar' => 'bar',
+            'foo1' => 'foo1',
+            'bar2' => 'bar2',
+        ];
+
+        $refined = $refinery->bring('fooBarRaw')->with(['quux' => 'quux1'])->refine($raw);
+
+        $this->assertArrayHasKey('fooBarRaw', $refined);
+        $this->assertEquals('foobar', $refined['fooBarRaw']);
+    }
 }

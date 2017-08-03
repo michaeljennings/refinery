@@ -36,4 +36,11 @@ class ObjectRefinery extends Refinery
             return $raw;
         });
     }
+
+    public function fooBarRaw()
+    {
+        return $this->attach(function($item) {
+            return $item->foo . $item->bar;
+        });
+    }
 }
