@@ -296,4 +296,24 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('fooBarRaw', $refined);
         $this->assertEquals('foobar', $refined['fooBarRaw']);
     }
+
+    /**
+     * @test
+     */
+    public function it_attaches_a_raw_attachment_from_an_object()
+    {
+        $refinery = new ObjectRefinery();
+
+        $raw = new stdClass();
+
+        $raw->foo = 'foo';
+        $raw->bar = 'bar';
+        $raw->foo1 = 'foo1';
+        $raw->bar1 = 'bar1';
+
+        $refined = $refinery->bring('fooBarRaw')->with(['quux' => 'quux1'])->refine($raw);
+
+        $this->assertArrayHasKey('fooBarRaw', $refined);
+        $this->assertEquals('foobar', $refined['fooBarRaw']);
+    }
 }
