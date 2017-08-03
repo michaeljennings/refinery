@@ -88,22 +88,9 @@ abstract class Refinery implements RefineryContract
     }
 
     /**
-     * Store the passed items within the $attributes
-     * property.
-     *
-     * @param array $items
-     * @return $this
-     */
-    public function with(array $items)
-    {
-        $this->attributes = $items;
-
-        return $this;
-    }
-
-    /**
-     * Return any required attachments. Check if the attachment needs to be filtered,
-     * if so they run the callback and then return the attachments.
+     * Return any required attachments. Check if the attachment needs to
+     * be filtered, if so they run the callback and then return the
+     * attachments.
      *
      * @param  mixed $raw
      * @return mixed
@@ -113,16 +100,20 @@ abstract class Refinery implements RefineryContract
         $attachments = [];
 
         foreach ($this->attachments as $attachment => $refinery) {
-            $class = $refinery['class'];
-            $callback = isset($refinery['callback']) ? $refinery['callback'] : false;
-
-            if ( ! $callback) {
-                $items = $this->getItems($raw, $refinery['class'], $attachment);
+            if (isset($refinery['raw'])) {
+                $attachments[$attachment] = $refinery['raw']($raw);
             } else {
-                $items = $this->getItemsUsingCallback($raw, $refinery['class'], $callback);
-            }
+                $class = $refinery['class'];
+                $callback = $refinery['callback'];
 
-            $attachments[$attachment] = ! is_null($items) ? $class->refine($items) : null;
+                if ( ! $callback) {
+                    $items = $this->getItems($raw, $class, $attachment);
+                } else {
+                    $items = $this->getItemsUsingCallback($raw, $class, $callback);
+                }
+
+                $attachments[$attachment] = ! is_null($items) ? $class->refine($items) : null;
+            }
         }
 
         return $attachments;
@@ -233,19 +224,21 @@ abstract class Refinery implements RefineryContract
     /**
      * Set the class to be used for the attachment.
      *
-     * @param string        $className
-     * @param callable|bool $callback
+     * @param string|callable $className
+     * @param callable|bool   $callback
      * @return array
      * @throws AttachmentClassNotFound
      */
     public function attach($className, callable $callback = null)
     {
-        if ( ! class_exists($className)) {
-            throw new AttachmentClassNotFound("No class found with the name '{$className}'.");
+        // If the user has passed through a callable item then we want
+        // to attach the raw result of that call.
+        if (is_callable($className)) {
+            return ['raw' => $className];
         }
 
-        if ( ! $callback) {
-            return ['class' => new $className];
+        if ( ! class_exists($className)) {
+            throw new AttachmentClassNotFound("No class found with the name '{$className}'.");
         }
 
         return ['class' => new $className, 'callback' => $callback];
@@ -365,6 +358,19 @@ abstract class Refinery implements RefineryContract
     }
 
     /**
+     * Store the passed items within the $attributes property.
+     *
+     * @param array $items
+     * @return $this
+     */
+    public function with(array $items)
+    {
+        $this->attributes = $items;
+
+        return $this;
+    }
+
+    /**
      * Use the __get magic method to access the items within the $attributes
      * array is if you were accessing a property on the class.
      *
@@ -373,7 +379,7 @@ abstract class Refinery implements RefineryContract
      */
     public function __get($key)
     {
-        if(array_key_exists($key, $this->attributes)) {
+        if (array_key_exists($key, $this->attributes)) {
             return $this->attributes[$key];
         }
 
