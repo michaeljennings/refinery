@@ -189,13 +189,14 @@ abstract class Refinery implements RefineryContract
             if ( ! is_numeric($key)) {
                 if (is_callable($relation)) {
                     $parsedRelations[$key] = $this->attachItem($key);
-                    $parsedRelations[$key]['class']->filter($relation);
+                    $parsedRelations[$key]['class']->with($this->attributes)->filter($relation);
                 } else {
                     $parsedRelations[$key] = $this->attachItem($key);
-                    $parsedRelations[$key]['class']->bring($relation);
+                    $parsedRelations[$key]['class']->with($this->attributes)->bring($relation);
                 }
             } else {
                 $parsedRelations[$relation] = $this->attachItem($relation);
+                $parsedRelations[$relation]['class']->with($this->attributes);
             }
         }
 
