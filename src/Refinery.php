@@ -196,7 +196,10 @@ abstract class Refinery implements RefineryContract
                 }
             } else {
                 $parsedRelations[$relation] = $this->attachItem($relation);
-                $parsedRelations[$relation]['class']->with($this->attributes);
+
+                if (isset($parsedRelations[$relation]['class'])) {
+                    $parsedRelations[$relation]['class']->with($this->attributes);
+                }
             }
         }
 
