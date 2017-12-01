@@ -1,5 +1,7 @@
 <?php
 
+namespace Michaeljennings\Refinery\Tests;
+
 use Michaeljennings\Refinery\Refinery;
 
 class ArrayRefinery extends Refinery
@@ -22,17 +24,17 @@ class ArrayRefinery extends Refinery
 
     public function fooBarAttach()
     {
-        return $this->attach('FooBarArrayRefinery');
+        return $this->attach(FooBarArrayRefinery::class);
     }
 
     public function fooBarEmbed()
     {
-        return $this->embed('FooBarArrayRefinery');
+        return $this->embed(FooBarArrayRefinery::class);
     }
 
     public function fooBarNest()
     {
-        return $this->nest('FooBarArrayRefinery', function($raw) {
+        return $this->nest(FooBarArrayRefinery::class, function($raw) {
             return $raw;
         });
     }

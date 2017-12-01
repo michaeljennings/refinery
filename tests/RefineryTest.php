@@ -1,5 +1,10 @@
 <?php
 
+namespace Michaeljennings\Refinery\Tests;
+
+use PHPUnit_Framework_TestCase;
+use stdClass;
+
 class RefineryTest extends PHPUnit_Framework_TestCase
 {
     /**

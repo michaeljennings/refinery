@@ -24,5 +24,10 @@
             "Michaeljennings\\Refinery\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Michaeljennings\\Refinery\\Tests\\": "tests/"
+        }
+    },
     "minimum-stability": "stable"
 }

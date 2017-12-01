@@ -1,5 +1,7 @@
 <?php
 
+namespace Michaeljennings\Refinery\Tests;
+
 use Michaeljennings\Refinery\Refinery;
 
 class FooBarObjectRefinery extends Refinery

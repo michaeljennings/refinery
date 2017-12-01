@@ -1,5 +1,7 @@
 <?php
 
+namespace Michaeljennings\Refinery\Tests;
+
 use Michaeljennings\Refinery\Refinery;
 
 class ObjectRefinery extends Refinery
@@ -22,17 +24,17 @@ class ObjectRefinery extends Refinery
 
     public function fooBarAttach()
     {
-        return $this->attach('FooBarObjectRefinery');
+        return $this->attach(FooBarObjectRefinery::class);
     }
 
     public function fooBarEmbed()
     {
-        return $this->embed('FooBarObjectRefinery');
+        return $this->embed(FooBarObjectRefinery::class);
     }
 
     public function fooBarNest()
     {
-        return $this->nest('FooBarObjectRefinery', function($raw) {
+        return $this->nest(FooBarObjectRefinery::class, function($raw) {
             return $raw;
         });
     }
