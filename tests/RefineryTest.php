@@ -209,6 +209,11 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                     'bar' => 'any number of things',
                 ],
             ],
+            'anotherNamedKey' => [
+                'foo' => [
+                    'unkeyed_array',
+                ],
+            ],
         ];
 
         // Without Key
