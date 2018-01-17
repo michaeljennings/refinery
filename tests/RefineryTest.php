@@ -27,7 +27,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ],
             'foobar' => [
                 'foobar' => 'foobar',
-            ]
+            ],
         ];
 
         $refined = $refinery->with(['quux' => 'quux1'])->refine($raw);
@@ -87,7 +87,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 ],
                 'foobar' => [
                     'foobar' => 'foobar',
-                ]
+                ],
             ],
             [
                 'foo' => 'foo',
@@ -102,7 +102,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 ],
                 'foobar' => [
                     'foobar' => 'foobar',
-                ]
+                ],
             ],
             [
                 'foo' => 'foo',
@@ -117,7 +117,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
                 ],
                 'foobar' => [
                     'foobar' => 'foobar',
-                ]
+                ],
             ],
         ];
 
@@ -181,7 +181,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ],
             'foobar' => [
                 'foobar' => 'foobar',
-            ]
+            ],
         ];
 
         $refined = $refinery->bring('fooBarAttach', 'fooBarEmbed', 'fooBarNest')->with(['quux' => 'quux1'])->refine($raw);
@@ -194,6 +194,40 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('fooBarNest', $refined);
         $this->assertArrayHasKey('foobar', $refined['fooBarNest']);
         $this->assertContains('quux1', $refined);
+    }
+
+    /**
+     * @test
+     */
+    public function it_retains_keys_where_appropriate()
+    {
+        $refinery = new NamedArrayRefinery();
+
+        $raw = [
+            'namedKey' => [
+                'foo' => [
+                    'bar' => 'any number of things',
+                ],
+            ],
+            'anotherNamedKey' => [
+                'foo' => [
+                    'unkeyed_array',
+                ],
+            ],
+        ];
+
+        // Without Key
+        $refined = $refinery->refine($raw);
+        $this->assertArrayNotHasKey('namedKey', $refined);
+
+        $retainKey = false;
+        $refined = $refinery->refine($raw, $retainKey);
+        $this->assertArrayNotHasKey('namedKey', $refined);
+
+        // With Key
+        $retainKey = true;
+        $refined = $refinery->refine($raw, $retainKey);
+        $this->assertArrayHasKey('namedKey', $refined);
     }
 
     /**
@@ -249,7 +283,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ],
             'foobar' => [
                 'foobar' => 'foobar',
-            ]
+            ],
         ];
 
         $refinery->bring('classDoesNotExist')->refine($raw);
@@ -276,7 +310,7 @@ class RefineryTest extends PHPUnit_Framework_TestCase
             ],
             'foobar' => [
                 'foobar' => 'foobar',
-            ]
+            ],
         ];
 
         $refinery->bring('notSet')->refine($raw);

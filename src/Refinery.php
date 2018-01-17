@@ -2,10 +2,10 @@
 
 namespace Michaeljennings\Refinery;
 
-use Traversable;
-use Michaeljennings\Refinery\Exceptions\RefineryMethodNotFound;
-use Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound;
 use Michaeljennings\Refinery\Contracts\Refinery as RefineryContract;
+use Michaeljennings\Refinery\Exceptions\AttachmentClassNotFound;
+use Michaeljennings\Refinery\Exceptions\RefineryMethodNotFound;
+use Traversable;
 
 abstract class Refinery implements RefineryContract
 {
@@ -31,6 +31,13 @@ abstract class Refinery implements RefineryContract
     protected $attributes = [];
 
     /**
+     * If we are iterating through a collection this will be the key of the current item.
+     *
+     * @var mixed
+     */
+    protected $key;
+
+    /**
      * Set the template the refinery will use for each item passed to it
      *
      * @param mixed $item
@@ -42,12 +49,13 @@ abstract class Refinery implements RefineryContract
      * Refine the item(s) using the set template.
      *
      * @param  mixed $raw
+     * @param bool   $retainKey
      * @return mixed
      */
-    public function refine($raw)
+    public function refine($raw, $retainKey = false)
     {
         if ((is_array($raw) && $this->isMultidimensional($raw)) || $raw instanceof Traversable) {
-            return $this->refineCollection($raw);
+            return $this->refineCollection($raw, $retainKey);
         }
 
         return $this->refineItem($raw);
@@ -74,14 +82,20 @@ abstract class Refinery implements RefineryContract
      * Refine a collection of raw items.
      *
      * @param mixed $raw
+     * @param boolean $retainKey
      * @return array
      */
-    public function refineCollection($raw)
+    public function refineCollection($raw, $retainKey = false)
     {
         $refined = [];
 
-        foreach ($raw as $item) {
-            $refined[] = $this->refineItem($item);
+        foreach ($raw as $key => $item) {
+            if ($retainKey) {
+                $this->key = $key;
+                $refined[ $key ] = $this->refineItem($item);
+            } else {
+                $refined[] = $this->refineItem($item);
+            }
         }
 
         return $refined;
@@ -372,6 +386,16 @@ abstract class Refinery implements RefineryContract
         $this->attributes = $items;
 
         return $this;
+    }
+
+    /**
+     * Get the current key.
+     *
+     * @return mixed
+     */
+    public function getKey()
+    {
+        return $this->key;
     }
 
     /**
