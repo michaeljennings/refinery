@@ -215,8 +215,13 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $refined = $refinery->refine($raw);
         $this->assertArrayNotHasKey('namedKey', $refined);
 
+        $retainKey = false;
+        $refined = $refinery->refine($raw, $retainKey);
+        $this->assertArrayNotHasKey('namedKey', $refined);
+
         // With Key
-        $refined = $refinery->refine($raw, true);
+        $retainKey = true;
+        $refined = $refinery->refine($raw, $retainKey);
         $this->assertArrayHasKey('namedKey', $refined);
     }
 
