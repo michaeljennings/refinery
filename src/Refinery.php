@@ -85,7 +85,7 @@ abstract class Refinery implements RefineryContract
      * @param boolean $retainKey
      * @return array
      */
-    public function refineCollection($raw, $retainKey)
+    public function refineCollection($raw, $retainKey = false)
     {
         $refined = [];
 

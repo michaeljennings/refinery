@@ -8,9 +8,10 @@ interface Refinery
      * Refine the item(s) using the set template.
      *
      * @param  mixed $raw
+     * @param  boolean $retainKey
      * @return mixed
      */
-    public function refine($raw);
+    public function refine($raw, $retainKey);
 
     /**
      * Refine a collection of raw items.
