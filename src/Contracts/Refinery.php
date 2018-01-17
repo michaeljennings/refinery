@@ -16,9 +16,10 @@ interface Refinery
      * Refine a collection of raw items.
      *
      * @param  mixed $raw
+     * @param  boolean $retainKey
      * @return array
      */
-    public function refineCollection($raw);
+    public function refineCollection($raw, $retainKey);
 
     /**
      * Set the attachments you want to bring with the refined items.
