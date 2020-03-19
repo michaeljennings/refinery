@@ -15,7 +15,8 @@ class FooBarObjectRefinery extends Refinery
     protected function setTemplate($item)
     {
         return [
-            'foobar' => $item->foobar
+            'foobar' => $item->foobar,
+            'quux' => $this->quux
         ];
     }
 }
