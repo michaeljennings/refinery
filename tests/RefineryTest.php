@@ -379,4 +379,3 @@ class RefineryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('quux1', $refined['fooBarAttach']['quux']);
     }
 }
-}
