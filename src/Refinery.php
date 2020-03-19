@@ -126,7 +126,7 @@ abstract class Refinery implements RefineryContract
                     $items = $this->getItemsUsingCallback($raw, $class, $callback);
                 }
 
-                $attachments[$attachment] = ! is_null($items) ? $class->refine($items) : null;
+                $attachments[$attachment] = ! is_null($items) ? $class->with($this->attributes)->refine($items) : null;
             }
         }
 
